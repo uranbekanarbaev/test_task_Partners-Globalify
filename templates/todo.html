@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block header %}
+<a href="/">Home</a>
+<form action="/logout" method="post" style="all: unset;">
+    <button type="submit">Logout</button>
+</form>
+
+{% endblock %}
+
+{% block content %}
+<h2>Your TODOs</h2>
+
+<form action="/todos/create" method="post" class="todo-form">
+    <h3>Add a new TODO</h3>
+    <div class="form-group">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required>
+    </div>
+    <div class="form-group">
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description" required>
+    </div>
+    <button type="submit">Add Todo</button>
+</form>
+
+<ul class="todo-list">
+    {% for todo in todos %}
+    <li class="todo-item">
+        <form action="/todos/{{ todo.id }}/update" method="post" class="todo-update-form">
+            <div class="form-group">
+                <label for="title_{{ todo.id }}">Title:</label>
+                <input type="text" id="title_{{ todo.id }}" name="title" value="{{ todo.title }}" required>
+            </div>
+            <div class="form-group">
+                <label for="description_{{ todo.id }}">Description:</label>
+                <input type="text" id="description_{{ todo.id }}" name="description" value="{{ todo.description }}" required>
+            </div>
+            <div class="form-group">
+                <label for="completed_{{ todo.id }}">Completed:</label>
+                <input type="checkbox" id="completed_{{ todo.id }}" name="completed" {% if todo.completed %}checked{% endif %}>
+            </div>
+            <button type="submit">Update</button>
+        </form>
+        <form action="/todos/{{ todo.id }}/delete" method="post" class="todo-delete-form">
+            <button type="submit">Delete</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
